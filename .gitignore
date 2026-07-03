@@ -1,0 +1,24 @@
+# Binaries
+tokenfuse
+*.exe
+
+# DB and state
+*.db
+*.db-shm
+*.db-wal
+tokenfuse.db*
+
+# Config with secrets
+tokenfuse.yaml
+*.local.yaml
+
+# Build / test artifacts
+/bin/
+/dist/
+*.test
+*.out
+
+# IDE
+.idea/
+.vscode/
+*.swp

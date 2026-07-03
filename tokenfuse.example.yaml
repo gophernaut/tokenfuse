@@ -1,0 +1,40 @@
+# tokenfuse.example.yaml
+# Copy to tokenfuse.yaml and set the referenced environment variables.
+# Never commit real keys.
+
+providers:
+  anthropic:
+    admin_key_env: ANTHROPIC_ADMIN_KEY
+  # openai:
+  #   admin_key_env: OPENAI_ADMIN_KEY
+
+poll_interval: 60s
+lookback: 15m
+timezone: Europe/Warsaw
+
+defaults:
+  anomaly:
+    multiplier: 20
+    sustain: 3m
+    warmup: 24h
+    half_life: 6h
+  unknown_model_price_per_mtok:
+    input: 15.0
+    output: 75.0
+
+keys:
+  # Specific key (matches by name or exact id)
+  - match: "trading-agent"
+    daily_budget: 10.00
+    on_trip: deactivate
+    anomaly: { multiplier: 15, sustain: 2m }  # optional override
+
+  # Catch-all is mandatory for safety
+  - match: "*"
+    monthly_budget: 200.00
+    on_trip: notify_only
+
+notify:
+  telegram:
+    token_env: TG_TOKEN
+    chat_id_env: TG_CHAT

@@ -1,0 +1,42 @@
+# prices.yaml — embedded default model pricing (USD per million tokens)
+# Format:
+# model:
+#   input: 3.0
+#   output: 15.0
+#   cache_read: 0.30
+#   cache_write: 3.75
+#
+# These numbers are examples. Update with current Anthropic pricing.
+# TokenFuse computes cost locally because cost_report is workspace-granular only.
+
+claude-3-5-sonnet-20241022:
+  input: 3.0
+  output: 15.0
+  cache_read: 0.30
+  cache_write: 3.75
+
+claude-3-5-haiku-20241022:
+  input: 0.80
+  output: 4.0
+  cache_read: 0.08
+  cache_write: 1.0
+
+claude-3-opus-20240229:
+  input: 15.0
+  output: 75.0
+  cache_read: 1.50
+  cache_write: 18.75
+
+# OpenAI examples (update with current pricing)
+gpt-4o:
+  input: 2.50
+  output: 10.00
+gpt-4o-mini:
+  input: 0.15
+  output: 0.60
+gpt-4-turbo:
+  input: 10.00
+  output: 30.00
+o1-preview:
+  input: 15.00
+  output: 60.00

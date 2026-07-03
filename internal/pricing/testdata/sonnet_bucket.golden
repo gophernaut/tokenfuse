@@ -1,0 +1,3 @@
+model=claude-3-5-sonnet-20241022
+uncached=5200 cached=450 creation=1500 output=980
+cost_usd=0.03606
