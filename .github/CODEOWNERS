@@ -1,0 +1,12 @@
+# CODEOWNERS for TokenFuse
+# These owners will be requested for review on PRs that touch the listed files.
+
+# Default owners for everything
+* @angalor
+
+# Critical areas that might need extra attention
+/.github/ @angalor
+/cmd/ @angalor
+/internal/ @angalor
+/go.mod @angalor
+/go.sum @angalor

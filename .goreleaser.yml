@@ -1,0 +1,102 @@
+# .goreleaser.yml
+# Professional release configuration for TokenFuse
+# Usage: goreleaser release --clean
+# Triggered automatically via .github/workflows/release.yml on tags
+
+project_name: tokenfuse
+
+before:
+  hooks:
+    - go mod tidy
+    - go mod verify
+
+builds:
+  - id: tokenfuse
+    main: ./cmd/tokenfuse
+    binary: tokenfuse
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+
+archives:
+  - id: default
+    builds:
+      - tokenfuse
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "arm64" }}arm64
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+      {{- if .Mips }}_{{ .Mips }}{{ end }}
+      {{- if .Darwin }}.{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - LICENSE
+      - README.md
+      - tokenfuse.example.yaml
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+  groups:
+    - title: Features
+      regexp: "^.*feat[(\\([\\w\\s]*\\))]*!?: .*"
+      order: 0
+    - title: 'Bug fixes'
+      regexp: "^.*fix[(\\([\\w\\s]*\\))]*!?: .*"
+      order: 1
+    - title: Others
+      order: 999
+
+# GitHub Releases
+release:
+  github:
+    owner: angalor
+    name: tokenfuse
+  draft: false
+  replace_existing_draft: true
+  mode: replace
+  header: |
+    ## TokenFuse {{ .Tag }}
+
+    Welcome to the {{ .Tag }} release of TokenFuse!
+  footer: |
+    ## Thanks!
+
+    Those were the changes on {{ .Tag }}!
+
+# Optional: Docker (commented out for now, enable if desired)
+# dockers:
+#   - image_templates:
+#       - "ghcr.io/angalor/tokenfuse:{{ .Tag }}"
+#       - "ghcr.io/angalor/tokenfuse:v{{ .Major }}"
+#       - "ghcr.io/angalor/tokenfuse:v{{ .Major }}.{{ .Minor }}"
+#     dockerfile: Dockerfile
+#     build_flag_templates:
+#       - "--pull"
+#       - "--label=org.opencontainers.image.created={{.Date}}"
+#       - "--label=org.opencontainers.image.title={{.ProjectName}}"
+#       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+#       - "--label=org.opencontainers.image.version={{.Version}}"
