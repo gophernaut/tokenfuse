@@ -87,16 +87,42 @@ release:
 
     Those were the changes on {{ .Tag }}!
 
-# Optional: Docker (commented out for now, enable if desired)
-# dockers:
-#   - image_templates:
-#       - "ghcr.io/angalor/tokenfuse:{{ .Tag }}"
-#       - "ghcr.io/angalor/tokenfuse:v{{ .Major }}"
-#       - "ghcr.io/angalor/tokenfuse:v{{ .Major }}.{{ .Minor }}"
-#     dockerfile: Dockerfile
-#     build_flag_templates:
-#       - "--pull"
-#       - "--label=org.opencontainers.image.created={{.Date}}"
-#       - "--label=org.opencontainers.image.title={{.ProjectName}}"
-#       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-#       - "--label=org.opencontainers.image.version={{.Version}}"
+# Docker images (published to GitHub Container Registry)
+dockers:
+  - image_templates:
+      - "ghcr.io/angalor/tokenfuse:{{ .Tag }}"
+      - "ghcr.io/angalor/tokenfuse:v{{ .Major }}"
+      - "ghcr.io/angalor/tokenfuse:v{{ .Major }}.{{ .Minor }}"
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+
+# Sign releases with cosign (recommended for security)
+signs:
+  - cmd: cosign
+    args:
+      - "sign-blob"
+      - "--yes"
+      - "--output-certificate=${artifact}.crt"
+      - "--output-signature=${artifact}.sig"
+      - "${artifact}"
+    artifacts: checksum
+    output: true
+
+# Homebrew tap (optional - requires a separate tap repo)
+brews:
+  - name: tokenfuse
+    homepage: "https://github.com/angalor/tokenfuse"
+    description: "Self-hosted circuit breaker for AI API spend"
+    license: "MIT"
+    repository:
+      owner: angalor
+      name: homebrew-tokenfuse
+    install: |
+      bin.install "tokenfuse"
+    test: |
+      system "#{bin}/tokenfuse", "version"
