@@ -127,3 +127,14 @@ brews:
       bin.install "tokenfuse"
     test: |
       system "#{bin}/tokenfuse", "version"
+
+signs:
+  - cmd: cosign
+    args:
+      - "sign-blob"
+      - "--yes"
+      - "--output-signature=${artifact}.sig"
+      - "--output-certificate=${artifact}.crt"
+      - "${artifact}"
+    artifacts: checksum
+    output: true
