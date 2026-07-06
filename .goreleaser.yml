@@ -116,12 +116,13 @@ signs:
 # Homebrew tap (optional - requires a separate tap repo)
 brews:
   - name: tokenfuse
-    homepage: "https://github.com/angalor/tokenfuse"
+    homepage: "https://github.com/gophernaut/tokenfuse"
     description: "Self-hosted circuit breaker for AI API spend"
     license: "MIT"
     repository:
-      owner: angalor
+      owner: gophernaut
       name: homebrew-tokenfuse
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     install: |
       bin.install "tokenfuse"
     test: |
