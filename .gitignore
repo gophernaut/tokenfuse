@@ -1,6 +1,6 @@
 # Binaries
-tokenfuse
 *.exe
+/tokenfuse
 
 # DB and state
 *.db
